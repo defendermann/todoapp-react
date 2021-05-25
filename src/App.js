@@ -1,25 +1,56 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react'
 
 function App() {
+
+  const initialValues = {
+    item: "",
+    list: [],
+  }
+  const [values, setValues] = useState(initialValues);
+
+  const onChange = (event) => {
+    const { name, value } = event.target
+    setValues({
+      ...values,
+      [name]: value
+    })
+  };
+
+  const onSubmit = (event) => {
+ 
+    setValues({
+      item: "",
+      list: [...values.list, values.item]
+    })
+  }
+
+  const deleteItem = (index) => {
+   console.log(index)
+   
+   const arr = values.list.slice(0, index)
+   .concat(values.list.slice(index + 1, values.list.length))
+   setValues({
+     list: arr
+   })
+  
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <input value={values.item}
+       onChange={onChange}
+       name="item"
+       label="item" />
+
+       {values.list
+        .map((item, index) => 
+          <div>
+            <li key={index}>{index}{item}</li>
+          <button onClick={() => deleteItem(index)}>Delete</button>
+          </div>
+       )}
+       <button onClick={onSubmit}>Submit</button>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
